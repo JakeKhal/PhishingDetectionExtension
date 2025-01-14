@@ -103,12 +103,10 @@ def get_scores_for_links(links, api_key):
 # VIRUSTOTAL API --END--
 
 if __name__ == "__main__":
+
+    #--VT test--
     links = ["www.apple.com", "www.chatgpt.com"]
-    
-    # Get scores for all links
     link_scores = get_scores_for_links(links, virustotal_api_key)
     print(link_scores)
-
-
 
     app.run(debug=True, port=5000)

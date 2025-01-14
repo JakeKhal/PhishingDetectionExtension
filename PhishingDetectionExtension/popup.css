@@ -1,0 +1,69 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    padding: 0;
+    background-color: #f9f9f9; /* Light background for readability */
+    color: #333; /* Dark text for contrast */
+  }
+  
+  h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 16px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  
+  /* Buttons */
+  button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Status Messages */
+  p {
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  
+  /* Textareas */
+  textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    resize: none;
+  }
+  
+  /* Preformatted Text (For Results) */
+  pre {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    overflow-x: auto;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  

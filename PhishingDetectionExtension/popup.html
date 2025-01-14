@@ -3,37 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phishing Scanner</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 10px;
-      width: 300px;
-    }
-    textarea {
-      width: 100%;
-      height: 60px;
-      margin-bottom: 10px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    .results {
-      margin-top: 10px;
-    }
-  </style>
+  <title>Phishing Detection</title>
 </head>
 <body>
-  <h1>Phishing Scanner</h1>
-  <textarea id="emailContent" placeholder="Paste email content here"></textarea>
-  <textarea id="emailLinks" placeholder="Paste links here (one per line)"></textarea>
-  <button id="analyzeButton">Analyze</button>
-  <div id="results" class="results"></div>
+  <h1>Phishing Detection</h1>
+
+  <!-- Scan Email Button -->
+  <button id="scanButton">Scan Email</button>
+  <p id="emailStatus"></p>
+
+  <!-- Textarea for URLs -->
+  <label for="urlList">Enter URLs or let it autofill:</label>
+  <textarea id="urlList" placeholder="URLs will appear here..." rows="5" cols="40"></textarea>
+
+  <!-- Analysis Status -->
+  <p id="contentRetrieved" style="font-weight: bold;"></p>
+
+  <!-- Analysis Results -->
+  <h2>Analysis Results</h2>
+  <p><strong>AI Analysis:</strong></p>
+  <p id="aiAnalysis"></p>
+  <p><strong>VirusTotal Results:</strong></p>
+  <pre id="vtResults"></pre>
+
   <script src="popup.js"></script>
 </body>
 </html>
