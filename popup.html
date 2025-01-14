@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phishing Scanner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+      width: 300px;
+    }
+    textarea {
+      width: 100%;
+      height: 60px;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .results {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Phishing Scanner</h1>
+  <textarea id="emailContent" placeholder="Paste email content here"></textarea>
+  <textarea id="emailLinks" placeholder="Paste links here (one per line)"></textarea>
+  <button id="analyzeButton">Analyze</button>
+  <div id="results" class="results"></div>
+  <script src="popup.js"></script>
+</body>
+</html>
