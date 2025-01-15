@@ -27,11 +27,22 @@ document.getElementById("scanButton").addEventListener("click", async () => {
 
     const data = await response.json();
 
-    // Display analysis results
-    document.getElementById("aiAnalysis").textContent = data.aiAnalysis || "No analysis available.";
+    // Handle errors from backend
+    if (data.error) {
+      emailStatus.textContent = `Error: ${data.error}`;
+      return;
+    }
+
+    // Display GPT Phishing Score
+    document.getElementById("aiAnalysis").textContent = `Phishing Score: ${data.phishingScore}`;
+
+    // Display VirusTotal Results
     document.getElementById("vtResults").textContent = JSON.stringify(data.virusTotalResults, null, 2);
+
+    // Update status
+    emailStatus.textContent = "Scan completed!";
   } catch (err) {
-    // Handle errors
+    // Handle fetch errors
     emailStatus.textContent = "Error scanning email.";
     console.error("Error:", err);
   }
