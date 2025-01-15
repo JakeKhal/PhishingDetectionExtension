@@ -6,16 +6,16 @@ The Phishing Detection Extension is a Chrome extension designed to analyze email
 
 
 ## Technologies Used
-• Frontend:
+<br>• Frontend:<br>
 Chrome Extension: Built with HTML, JavaScript, and CSS to provide a simple and intuitive user interface.
 Content Scripts: Extract email content directly from Gmail's DOM.
-• Backend:
+<br>• Backend:<br>
 Flask: Serves as the backend for processing email content and coordinating API requests.
-Flask-CORS: Enables secure communication between the frontend and backend.
-• APIs:
+<br>Flask-CORS: Enables secure communication between the frontend and backend.
+<br>• APIs:<br>
 OpenAI GPT-4 API: Analyzes email content and provides a phishing confidence score based on linguistic and contextual patterns.
-VirusTotal API: Scans URLs extracted from email content and provides detailed analysis of their safety (e.g., malicious, suspicious, or undetected).
-• Parsing Tools:
+<br>VirusTotal API: Scans URLs extracted from email content and provides detailed analysis of their safety (e.g., malicious, suspicious, or undetected).
+<br>• Parsing Tools:<br>
 BeautifulSoup: Extracts plain text and links from email HTML for analysis.
 
 ## Running This Extension
