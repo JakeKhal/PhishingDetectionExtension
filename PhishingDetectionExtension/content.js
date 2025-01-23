@@ -1,3 +1,5 @@
+console.log("Content script loaded.");
+
 // Function to parse Gmail email subject and body
 function parseEmailContent() {
   console.log("Parsing email content...");
@@ -29,15 +31,14 @@ function parseEmailContent() {
   return { emailSubject, emailBody };
 }
 
-
 // Listen for messages from popup.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "extract_email") {
     const emailData = parseEmailContent();
     if (emailData.emailSubject || emailData.emailBody) {
-      sendResponse(emailData); // Send the parsed email content back
+      sendResponse(emailData);
     } else {
-      sendResponse({ error: "No email content found." });
+      sendResponse({ error: "No email content found. Please select an email." });
     }
   }
 });

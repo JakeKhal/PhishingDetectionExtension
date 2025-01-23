@@ -1,11 +1,10 @@
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 import openai
 import requests
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
+from flask_cors import CORS
 import os
 import json
-from flask_cors import CORS
 
 # Load environment variables
 load_dotenv()
@@ -17,23 +16,29 @@ CORS(app)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 virustotal_api_key = os.getenv("VIRUSTOTAL_API_KEY")
 
+@app.route('/')
+def home():
+    return "Phishing Detection Backend is running.", 200
+
+@app.route('/favicon.ico')
+def favicon():
+    return '', 204
+
 @app.route('/analyze', methods=['POST'])
 def analyze_email():
     """
     Main endpoint to analyze email content and links.
     """
     data = request.json
-    raw_email_content = data.get('emailContent', '')
-    
-    # Extract email text and links using BeautifulSoup
-    email_text, links = extract_email_data(raw_email_content)
+    email_content = data.get('emailContent', '')  # Content directly from content.js
+    links = data.get('links', [])  # Links directly from content.js
 
     try:
         # Scan links using VirusTotal
         vt_results = scan_links_with_virustotal(links)
 
         # Get phishing score from ChatGPT, including VirusTotal data
-        phishing_score = analyze_with_chatgpt(email_text, vt_results)
+        phishing_score = analyze_with_chatgpt(email_content, vt_results)
 
         return jsonify({
             "phishingScore": phishing_score,
@@ -41,16 +46,6 @@ def analyze_email():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-def extract_email_data(raw_email_content):
-    """
-    Extract plain text and links from raw email content using BeautifulSoup.
-    """
-    soup = BeautifulSoup(raw_email_content, 'html.parser')
-    email_text = soup.get_text(strip=True)  # Extract plain text
-    links = [a['href'] for a in soup.find_all('a', href=True)]  # Extract links
-    return email_text, links
 
 
 def analyze_with_chatgpt(email_text, vt_results):
@@ -91,16 +86,13 @@ def analyze_with_chatgpt(email_text, vt_results):
         
         # Call OpenAI API with the new interface
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # Use gpt-3.5-turbo for cost efficiency if needed
+            model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are an AI specialized in phishing detection."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.3,  # Low randomness for consistent and reliable responses
-            max_tokens=150,  # Set a reasonable limit for concise output
-            top_p=1.0,
-            frequency_penalty=0,
-            presence_penalty=0
+            temperature=0.3,
+            max_tokens=150
         )
 
         # Parse the JSON response content
@@ -110,6 +102,7 @@ def analyze_with_chatgpt(email_text, vt_results):
     except Exception as e:
         return {"error": f"OpenAI API error: {str(e)}"}
 
+
 def scan_links_with_virustotal(links):
     """
     Use VirusTotal API to scan links for phishing or malware.
@@ -118,71 +111,46 @@ def scan_links_with_virustotal(links):
     analysis_results = {}
 
     for link in links:
-        # Ensure link has correct formatting
-        if not link.startswith("http://") and not link.startswith("https://"):
-            link = "https://" + link
+        try:
+            # Ensure link has correct formatting
+            if not link.startswith(("http://", "https://")):
+                link = "https://" + link
 
-        # Submit the link to VirusTotal for analysis
-        response = requests.post(
-            "https://www.virustotal.com/api/v3/urls",
-            headers=headers,
-            data={"url": link}
-        )
-        response_data = response.json()
-
-        if 'data' in response_data and 'id' in response_data['data']:
-            # Fetch analysis details using the analysis ID
-            analysis_id = response_data['data']['id']
-            details_response = requests.get(
-                f"https://www.virustotal.com/api/v3/analyses/{analysis_id}",
-                headers=headers
+            # Submit the link to VirusTotal for analysis
+            response = requests.post(
+                "https://www.virustotal.com/api/v3/urls",
+                headers=headers,
+                data={"url": link}
             )
-            details_data = details_response.json()
+            response_data = response.json()
 
-            # Extract statistics (malicious, suspicious, undetected)
-            if 'data' in details_data and 'attributes' in details_data['data']:
-                stats = details_data['data']['attributes']['stats']
-                analysis_results[link] = {
-                    "malicious": stats.get('malicious', 0),
-                    "suspicious": stats.get('suspicious', 0),
-                    "undetected": stats.get('undetected', 0)
-                }
+            if 'data' in response_data and 'id' in response_data['data']:
+                # Fetch analysis details using the analysis ID
+                analysis_id = response_data['data']['id']
+                details_response = requests.get(
+                    f"https://www.virustotal.com/api/v3/analyses/{analysis_id}",
+                    headers=headers
+                )
+                details_data = details_response.json()
+
+                # Extract statistics (malicious, suspicious, undetected)
+                if 'data' in details_data and 'attributes' in details_data['data']:
+                    stats = details_data['data']['attributes']['stats']
+                    analysis_results[link] = {
+                        "malicious": stats.get('malicious', 0),
+                        "suspicious": stats.get('suspicious', 0),
+                        "undetected": stats.get('undetected', 0)
+                    }
+                else:
+                    analysis_results[link] = {"error": "Details not found"}
             else:
-                analysis_results[link] = {"error": "Details not found"}
-        else:
-            analysis_results[link] = {"error": "Submission failed"}
+                analysis_results[link] = {"error": "Submission failed"}
+        except requests.exceptions.RequestException as e:
+            analysis_results[link] = {"error": f"VirusTotal API request failed: {str(e)}"}
 
     return analysis_results
 
 
 if __name__ == "__main__":
-    # Test data for the email analysis
-    test_email_content = """
-    <html>
-        <body>
-            <p>Dear user,</p>
-            <p>Your account has been compromised. Please click the link below to reset your password:</p>
-            <a href="http://phishing.com">Reset Password</a>
-        </body>
-    </html>
-    """
-
-    # Extract text and links from test email
-    email_text, links = extract_email_data(test_email_content)
-    print("Extracted Email Text:")
-    print(email_text)
-    print("\nExtracted Links:")
-    print(links)
-
-    # Test VirusTotal link scanning
-    print("\nVirusTotal Analysis:")
-    vt_results = scan_links_with_virustotal(links)
-    print(vt_results)
-
-    # Test ChatGPT phishing analysis
-    print("\nChatGPT Phishing Analysis:")
-    phishing_score = analyze_with_chatgpt(email_text, vt_results)
-    print(f"Phishing Score: {phishing_score}")
-
-    # Run the Flask app
     app.run(debug=True, port=5000)
+
