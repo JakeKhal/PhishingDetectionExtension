@@ -3,6 +3,12 @@ document.getElementById("scanButton").addEventListener("click", () => {
   emailStatus.textContent = "Parsing email content...";
 
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (!tabs.length) {
+      console.error("No active tabs found.");
+      emailStatus.textContent = "Error: No active tab detected.";
+      return;
+    }
+
     chrome.tabs.sendMessage(
       tabs[0].id,
       { message: "extract_email" },
@@ -13,52 +19,53 @@ document.getElementById("scanButton").addEventListener("click", () => {
           return;
         }
 
-        if (response.error) {
-          console.error("Error:", response.error);
-          emailStatus.textContent = `Error: ${response.error}`;
+        if (!response || response.error) {
+          console.error("Error:", response?.error || "No response from content script.");
+          emailStatus.textContent = `Error: ${response?.error || "Failed to extract email data."}`;
           return;
         }
 
         const { emailBody, emailSubject } = response;
 
-        // Update the UI with parsed email content
-        document.getElementById("emailContent").textContent = `Subject: ${emailSubject}` + `Body: ${emailBody}`;
+        document.getElementById("emailContent").textContent = `Subject: ${emailSubject}\nBody: ${emailBody}`;
         emailStatus.textContent = "Email content parsed successfully!";
 
-        // Log the data being sent to the backend
+        const extractedLinks = extractLinks(emailBody);
+
         console.log("Sending to backend:", {
-          emailSubject: emailSubject, 
+          emailSubject: emailSubject,
           emailBody: emailBody,
-          links: extractLinks(emailBody)  // Log the extracted links as well
+          links: extractedLinks
         });
 
         try {
-          // Send both the subject and body to the backend for analysis
-          const backendResponse = await fetch("http://127.0.0.1:5000/analyze", {
+          // Send email data to backend
+          const backendResponse = await fetch("http://localhost:3000/analyze", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              emailSubject: emailSubject,  // Add email subject here
-              emailBody: emailBody,        // Send the body content as well
-              links: extractLinks(emailBody) // Dynamically extract links
+              emailSubject: emailSubject,
+              emailBody: emailBody,
+              links: extractedLinks
             }),
           });
 
+          if (!backendResponse.ok) {
+            throw new Error(`HTTP error! Status: ${backendResponse.status}`);
+          }
+
           const data = await backendResponse.json();
 
-          // Handle errors from the backend
           if (data.error) {
             console.error("Backend error:", data.error);
             emailStatus.textContent = `Error: ${data.error}`;
             return;
           }
 
-          // Display the phishing score
-          document.getElementById("phishingScoreDisplay").textContent = `Phishing Score: ${data.phishingScore}`;
-
-          // Display additional backend results
+          // Display phishing score & analysis results
+          document.getElementById("phishingScoreDisplay").textContent = `Phishing Score: ${data.phishingScore || "N/A"}`;
           document.getElementById("aiAnalysis").textContent = data.aiAnalysis || "No AI analysis available.";
           document.getElementById("vtResults").textContent = JSON.stringify(data.virusTotalResults, null, 2);
         } catch (err) {
@@ -70,8 +77,6 @@ document.getElementById("scanButton").addEventListener("click", () => {
   });
 });
 
-
-// Function to extract links from the email body
 function extractLinks(emailBody) {
   const urlRegex = /(?:https?:\/\/|www\.)[^\s<>'"]+/gi;
   return emailBody.match(urlRegex) || [];
