@@ -4,7 +4,7 @@
   "version": "1.0",
   "description": "Analyze emails for phishing.",
   "permissions": ["activeTab", "scripting"],
-  "host_permissions": ["https://mail.google.com/*"],
+  "host_permissions": ["https://mail.google.com/*", "http://localhost:3000/*"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": "icons/icon128.png"

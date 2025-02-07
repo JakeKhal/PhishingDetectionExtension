@@ -1,14 +1,18 @@
 console.log("Content script loaded.");
 
-// Function to parse Gmail email subject and body
 function parseEmailContent() {
-  console.log("Parsing email content...");
+  console.log("Attempting to parse email content...");
 
   let emailSubject = "";
   let emailBody = "";
 
-  const subjectElement = document.querySelector("h2.hP");
-  console.log("Subject element:", subjectElement);
+  if (!window.location.href.includes("mail.google.com")) {
+    console.warn("Not on Gmail. Exiting email parsing.");
+    return { error: "Not on a Gmail email page." };
+  }
+
+  const subjectElement = document.querySelector("h2.hP, .ha > h2");
+  console.log("Subject element detected:", subjectElement);
 
   if (subjectElement) {
     emailSubject = subjectElement.innerText || subjectElement.textContent;
@@ -16,8 +20,8 @@ function parseEmailContent() {
     console.error("Email subject not found.");
   }
 
-  const bodyElement = document.querySelector(".a3s");
-  console.log("Body element:", bodyElement);
+  const bodyElement = document.querySelector(".a3s, .ii.gt");
+  console.log("Body element detected:", bodyElement);
 
   if (bodyElement) {
     emailBody = bodyElement.innerText || bodyElement.textContent;
@@ -26,19 +30,20 @@ function parseEmailContent() {
   }
 
   console.log("Parsed email subject:", emailSubject);
-  console.log("Parsed email body:", emailBody);
+  console.log("Parsed email body:", emailBody.length > 200 ? emailBody.substring(0, 200) + "..." : emailBody);
+
+  if (!emailSubject && !emailBody) {
+    console.error("Failed to extract email content.");
+    return { error: "No email content found. Please select an email." };
+  }
 
   return { emailSubject, emailBody };
 }
 
-// Listen for messages from popup.js
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.message === "extract_email") {
+    console.log("Received extract_email request from popup.js");
     const emailData = parseEmailContent();
-    if (emailData.emailSubject || emailData.emailBody) {
-      sendResponse(emailData);
-    } else {
-      sendResponse({ error: "No email content found. Please select an email." });
-    }
+    sendResponse(emailData);
   }
 });
