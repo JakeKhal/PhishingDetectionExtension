@@ -1,10 +1,11 @@
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
-import openai
+import openai  # Fix import: Use openai directly
 import requests
 from flask_cors import CORS
 import os
 import json
+import re
 
 # Load environment variables
 load_dotenv()
@@ -69,7 +70,7 @@ def analyze_with_chatgpt(email_text, vt_results):
         """
         
         response = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-4o-mini",  # Ensure this model is available for your account
             messages=[
                 {"role": "system", "content": "You are an AI specialized in phishing detection."},
                 {"role": "user", "content": prompt}
@@ -80,11 +81,24 @@ def analyze_with_chatgpt(email_text, vt_results):
 
         try:
             response_content = response['choices'][0]['message']['content']
-            response_json = json.loads(response_content.strip())
-            return response_json["phishingScore"], response_json["analysisExplanation"]
-        except (json.JSONDecodeError, KeyError) as e:
-            app.logger.error(f"Invalid OpenAI response: {response_content}")
-            return 50, "Could not parse AI response."
+            #print("RAW OpenAI Response:", response_content)  # Debugging log
+
+            # Remove any markdown-style triple backticks before parsing
+            cleaned_response = re.sub(r"```json|```", "", response_content).strip()
+            
+            response_json = json.loads(cleaned_response)
+
+            phishing_score = response_json.get("phishingScore", 50)  # Default to 50 if missing
+            analysis_explanation = response_json.get("analysisExplanation", "No analysis available.")
+
+            return phishing_score, analysis_explanation
+        except json.JSONDecodeError:
+            app.logger.error(f"Failed to parse OpenAI response as JSON: {response_content}")
+            return 50, "AI response was not in JSON format."
+        except KeyError:
+            app.logger.error(f"Missing keys in OpenAI response: {response_content}")
+            return 50, "AI response was missing required keys."
+
 
     except Exception as e:
         app.logger.error(f"Error in analyze_with_chatgpt: {str(e)}")
@@ -138,4 +152,4 @@ def scan_links_with_virustotal(links):
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=3000) 
+    app.run(debug=True, port=3000)
