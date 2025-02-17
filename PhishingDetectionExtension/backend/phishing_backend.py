@@ -70,7 +70,7 @@ def analyze_with_chatgpt(email_text, vt_results):
         """
         
         response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",  # Ensure this model is available for your account
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You are an AI specialized in phishing detection."},
                 {"role": "user", "content": prompt}
