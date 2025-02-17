@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
-import openai  # Fix import: Use openai directly
+import openai
 import requests
 from flask_cors import CORS
 import os
