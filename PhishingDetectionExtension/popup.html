@@ -3,35 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Phishing Detection</title>
+  <title>Phishing Detection Extension</title>
+  <link rel="stylesheet" href="popup.css">
 </head>
 <body>
-  <h1>Phishing Detection</h1>
 
-  <h4>Go to extension settings and allow "When you click extension" in "This can read and change site data"</h4>
+  <div class="container">
+    <h1 class="title">Phishing Detection</h1>
+    <p class="subtitle">• Don’t Take the Bait: Tool for Phishing Defense •</p>
 
-  <button id="scanButton">Scan Email</button>
-  <p id="emailStatus"></p>
+    <button id="scanButton" class="scan-btn">🔍 Scan Email</button>
+    <p id="emailStatus" class="status-msg"></p>
 
-  <label for="urlList">Enter URLs or let it autofill:</label>
-  <textarea id="urlList" placeholder="URLs will appear here..." rows="5" cols="40"></textarea>
+    <div class="score-card">
+      <h2 id="phishingScoreDisplay">Phishing Score: N/A</h2>
+    </div>
 
-  <p id="contentRetrieved" style="font-weight: bold;"></p>
+    <div class="content-box">
+      <button class="toggle-btn" data-target="emailContent">📩 Email Content ▼</button>
+      <div id="emailContent" class="toggle-content">No email content available.</div>
+    </div>
 
-  <h1 id="phishingScoreDisplay" style="color: red; font-size: 2em; text-align: center; margin-top: 20px;">
-    Phishing Score: N/A
-  </h1>
+    <div class="content-box">
+      <button class="toggle-btn" data-target="urlList">🔗 Detected Links ▼</button>
+      <textarea id="urlList" readonly rows="4" class="toggle-content">No links detected.</textarea>
+    </div>
 
-  <h2>Analysis Results</h2>
-
-  <p>Email Content:</p>
-  <p id="emailContent"></p>
-
-  <p><strong>AI Analysis:</strong></p>
-  <p id="aiAnalysis"></p>
-
-  <p><strong>VirusTotal Results:</strong></p>
-  <pre id="vtResults"></pre>
+    <button id="showAnalysis" class="analysis-btn">🧠 Show AI Analysis  ▼</button>
+    <div id="analysisContainer" class="hidden">
+      <p><strong>AI Analysis:</strong></p>
+      <p id="aiAnalysis">No analysis available.</p>
+      <p><strong>VirusTotal Results:</strong></p>
+      <pre id="vtResults">No results available.</pre>
+    </div>
+  </div>
 
   <script src="popup.js"></script>
 </body>

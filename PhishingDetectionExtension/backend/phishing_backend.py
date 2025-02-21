@@ -7,7 +7,6 @@ import os
 import json
 import re
 
-# Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
@@ -83,12 +82,11 @@ def analyze_with_chatgpt(email_text, vt_results):
             response_content = response['choices'][0]['message']['content']
             #print("RAW OpenAI Response:", response_content)  # Debugging log
 
-            # Remove any markdown-style triple backticks before parsing
             cleaned_response = re.sub(r"```json|```", "", response_content).strip()
             
             response_json = json.loads(cleaned_response)
 
-            phishing_score = response_json.get("phishingScore", 50)  # Default to 50 if missing
+            phishing_score = response_json.get("phishingScore", 50)  
             analysis_explanation = response_json.get("analysisExplanation", "No analysis available.")
 
             return phishing_score, analysis_explanation
