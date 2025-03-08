@@ -52,8 +52,10 @@ def analyze_email():
 def analyze_with_chatgpt(email_text, vt_results):
     try:
         prompt = f"""
-        You are an AI specialized in phishing detection. Analyze the following email and its associated VirusTotal data 
-        for potential phishing activity.
+        You are an AI specialized in phishing detection. Analyze the following email content and its associated VirusTotal data 
+        for potential phishing activity. You should return a phishing score between 0 and 100, with 0 meaning no phishing and 100 meaning complete certainty it's a phishing attempt. Consider any signs of email spoofing, suspicious URLs, or other phishing indicators in the email or the VirusTotal results. 
+
+        Please ensure your analysis is brief (3-4 sentences max) and include an explanation with possible links to relevant phishing cases or articles for users to learn more about these types of attacks.
 
         - Email Content:
         {email_text}
@@ -64,7 +66,7 @@ def analyze_with_chatgpt(email_text, vt_results):
         Provide a JSON object:
         {{
             "phishingScore": <numeric value between 0 and 100>,
-            "analysisExplanation": <string explaining your analysis>
+            "analysisExplanation": <string explaining your analysis, including a possible link to a similar phishing example or article if available>
         }}
         """
         

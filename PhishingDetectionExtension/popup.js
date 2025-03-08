@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
   scanButton.addEventListener("click", () => {
     emailStatus.textContent = "Parsing email content...";
     
-    phishingScoreDisplay.textContent = "Phishing Score: Loading...";
+    phishingScoreDisplay.textContent = "Phishing Score: Thinking...";
     phishingScoreDisplay.classList.remove("green", "yellow", "orange", "red");
 
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
           const { emailBody, emailSubject } = response;
           emailContent.textContent = `Subject: ${emailSubject}\n\n${emailBody}`;
-          emailStatus.textContent = "Email content parsed successfully!";
+          emailStatus.textContent = "Email Parsed Successfully!";
           urlList.value = extractLinks(emailBody).join("\n") || "No links detected.";
 
           try {
