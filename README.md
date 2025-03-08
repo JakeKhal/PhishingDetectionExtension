@@ -24,6 +24,9 @@ The extension extracts email content, sends it to an AI-powered backend, and ret
 - **OpenAI GPT-4 API**: Analyzes email content for **phishing indicators**, including urgency, language patterns, and social engineering tactics.
 - **VirusTotal API**: Scans URLs extracted from email content and categorizes them as **malicious, suspicious, or undetected**.
 
+### **Parsing Tools**
+- **querySelector()**: Used to extract the plain text and links from email **HTML** for analysis.---
+
 ---
 
 ## 🚀 Running This Extension (Local Setup)

@@ -7,7 +7,7 @@
   "host_permissions": ["https://mail.google.com/*", "http://localhost:3000/*"],
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "icons/icon128.png"
+    "default_icon": "icons/icon.png"
   },
   "content_scripts": [
     {
