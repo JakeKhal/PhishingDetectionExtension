@@ -25,7 +25,7 @@ The extension extracts email content, sends it to an AI-powered backend, and ret
 - **VirusTotal API**: Scans URLs extracted from email content and categorizes them as **malicious, suspicious, or undetected**.
 
 ### **Parsing Tools**
-- **querySelector()**: Used to extract the plain text and links from email **HTML** for analysis.
+- **querySelector()**: Used to extract the plain text and links from email **HTML** for analysis.---
 
 ---
 
