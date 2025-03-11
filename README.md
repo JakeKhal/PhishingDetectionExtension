@@ -13,7 +13,7 @@ The extension extracts email content, sends it to an AI-powered backend, and ret
 ## 🛠️ Technologies Used
 ### **Frontend**
 - **Chrome Extension**: Built with **HTML, JavaScript, and CSS** for an intuitive user interface.
-- **Content Scripts**: Extracts email content directly from Gmail's **DOM**.
+- **Content Scripts**: Extracts email content directly from Gmail's Document Object Model **(DOM)**.
 - **Popup UI**: Displays phishing analysis results with a user-friendly interface.
 
 ### **Backend**
