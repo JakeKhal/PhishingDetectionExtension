@@ -29,14 +29,16 @@
       <textarea id="urlList" readonly rows="4" class="toggle-content">No links detected.</textarea>
     </div>
 
-    <button id="showAnalysis" class="analysis-btn">🧠 Show AI Analysis  ▼</button>
-    <div id="analysisContainer" class="hidden">
-      <p><strong>AI Analysis:</strong></p>
-      <p id="aiAnalysis">No analysis available.</p>
-      <p><strong>VirusTotal Results:</strong></p>
-      <pre id="vtResults">No results available.</pre>
+    <div class="content-box">
+      <button id="showAnalysis" class="toggle-btn" data-target="analysisContainer">🧠 Show AI Analysis ▼</button>
+      <div id="analysisContainer" class="toggle-content">
+        <p><strong>AI Analysis:</strong></p>
+        <p id="aiAnalysis">No analysis available.</p>
+        <p><strong>VirusTotal Results:</strong></p>
+        <pre id="vtResults">No results available.</pre>
+      </div>
     </div>
-  </div>
+    
 
   <script src="popup.js"></script>
 </body>

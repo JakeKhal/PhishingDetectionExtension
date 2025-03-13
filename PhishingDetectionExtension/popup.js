@@ -77,6 +77,38 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   function extractLinks(emailBody) {
-    return emailBody.match(/(?:https?:\/\/|www\.)[^\s<>'"]+/gi) || [];
-  }
+    let links = new Set();
+
+    const urlRegex = /https?:\/\/[^\s<>'"()]+|www\.[^\s<>'"()]+/gi;
+    (emailBody.match(urlRegex) || []).forEach(link => links.add(link));
+
+    if (emailBody.includes("<") && emailBody.includes(">")) {
+        try {
+            const doc = new DOMParser().parseFromString(emailBody, "text/html");
+
+            doc.querySelectorAll("a").forEach(a => {
+                let href = a.getAttribute("href");
+
+                let saferUrl = a.getAttribute("data-saferedirecturl");
+                if (saferUrl) {
+                    href = saferUrl;
+                }
+
+                if (href && href.includes("www.google.com/url?q=")) {
+                    const match = href.match(/q=([^&]+)/);
+                    if (match) {
+                        href = decodeURIComponent(match[1]); 
+                    }
+                }
+
+                if (href) links.add(href);
+            });
+        } catch (e) {
+            console.error("Error parsing HTML:", e);
+        }
+    }
+    return Array.from(links)
+        .filter(link => link.startsWith("http") && !link.includes("ci3.googleusercontent.com") && !link.includes("mail.google.com"));
+}
+
 });

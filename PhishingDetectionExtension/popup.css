@@ -127,6 +127,35 @@ button {
   display: none;
 }
 
+#analysisContainer {
+  display: none;
+  max-height: 150px; /* Same as email content */
+  overflow-y: auto;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+}
+
+#showAnalysis {
+  background: #28a745; 
+  color: white;
+  font-size: 1em;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+  display: block; 
+  margin: 10px auto;
+  width: 90%; 
+}
+
+#showAnalysis:hover {
+  background: #218838; 
+}
+
+
 /* Phishing Score Colors */
 .green { color: green; }
 .yellow { color: orange; }
