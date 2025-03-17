@@ -31,6 +31,11 @@ The extension extracts email content, sends it to an AI-powered backend, and ret
 
 ## 🚀 Running This Extension (Local Setup)
 1. Clone this repository.
-2. Populate API keys as instructed.
+2. Populate API keys as instructed:
+    - Create ".env" file in backend foler with format:
+
+    OPENAI_API_KEY=openai_api_key
+    VIRUSTOTAL_API_KEY=virustotal_api_key
+
 3. Load the folder /PhishingDetection Extension content in Chrome as an [unpacked extension](https://developer.chrome.com/docs/extensions/mv3/getstarted/development-basics/#load-unpacked).
 4. Click the extension icon in the Chrome toolbar, then select the "PhishingDetectionExtension" extension. It should then be accessible in extensions menu.
