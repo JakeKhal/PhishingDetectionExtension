@@ -129,7 +129,7 @@ button {
 
 #analysisContainer {
   display: none;
-  max-height: 150px; /* Same as email content */
+  max-height: 150px; 
   overflow-y: auto;
   padding: 8px;
   border-radius: 6px;

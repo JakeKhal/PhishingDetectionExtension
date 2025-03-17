@@ -75,7 +75,8 @@ document.addEventListener("DOMContentLoaded", function () {
   showAnalysisButton.addEventListener("click", function () {
     analysisContainer.classList.toggle("hidden");
   });
-
+  
+  //REGEX help from AI to grab the URLs
   function extractLinks(emailBody) {
     let links = new Set();
 

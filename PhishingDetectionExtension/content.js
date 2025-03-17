@@ -3,11 +3,9 @@ console.log("Content script loaded.");
 function extractLinks(emailBody) {
     let links = new Set();
 
-    // Extract plain-text URLs using regex
     const urlRegex = /https?:\/\/[^\s<>'"()]+|www\.[^\s<>'"()]+/gi;
     (emailBody.match(urlRegex) || []).forEach(link => links.add(link));
 
-    // Parse HTML to extract all <a> tag links
     if (emailBody.includes("<") && emailBody.includes(">")) {
         try {
             const doc = new DOMParser().parseFromString(emailBody, "text/html");
@@ -15,11 +13,11 @@ function extractLinks(emailBody) {
             doc.querySelectorAll("a").forEach(a => {
                 let href = a.getAttribute("href");
 
-                // Handle Gmail tracking redirects
+
                 if (href && href.includes("www.google.com/url?q=")) {
                     const match = href.match(/q=([^&]+)/);
                     if (match) {
-                        href = decodeURIComponent(match[1]); // Extract real URL
+                        href = decodeURIComponent(match[1]); 
                     }
                 }
 
@@ -30,9 +28,9 @@ function extractLinks(emailBody) {
         }
     }
 
-    // Convert Set to Array and restrict to the first 4 links (this is because API has limit of 4)
     return Array.from(links).slice(0, 4);
 }
+
 
 function parseEmailContent() {
     console.log("Attempting to parse email content...");
