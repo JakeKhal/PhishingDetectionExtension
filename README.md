@@ -1,6 +1,9 @@
 # Phishing Detection Google Extension
 CS433 - Jake Khal - Rajveer Gill - Jamie Whiting
 
+[Click here to view our Presentation] (https://www.canva.com/design/DAGhXgNvbdA/VdMluFFBNrlNSndNGLhVRg/view?utm_content=DAGhXgNvbdA&utm_campaign=share_your_design&utm_medium=link2&utm_source=shareyourdesignpanel#1)
+
+
 ## 📖 Description
 The **Phishing Detection Extension** is a Chrome extension designed to analyze email content and detect potential phishing attempts.  
 It provides users with a **phishing confidence score (0-100)** for emails viewed in **Gmail**, helping them identify and avoid malicious attacks.  
