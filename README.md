@@ -1,7 +1,7 @@
 # Phishing Detection Google Extension
 CS433 - Jake Khal - Rajveer Gill - Jamie Whiting
 
-[Click here to view our Presentation](https://www.canva.com/design/DAGhXgNvbdA/VdMluFFBNrlNSndNGLhVRg/view?utm_content=DAGhXgNvbdA&utm_campaign=share_your_design&utm_medium=link2&utm_source=shareyourdesignpanel#1)
+[Click here to view our Presentation with a Recorded Demo](https://www.canva.com/design/DAGhXgNvbdA/VdMluFFBNrlNSndNGLhVRg/view?utm_content=DAGhXgNvbdA&utm_campaign=share_your_design&utm_medium=link2&utm_source=shareyourdesignpanel#1)
 
 
 ## 📖 Description
